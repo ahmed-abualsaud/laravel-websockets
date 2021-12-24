@@ -32,12 +32,19 @@ return [
 
         'pusher' => [
             'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'app_id' => env('PUSHER_APP_ID'),
+            'key' => env('STAGING_APP_KEY'),
+            'secret' => env('STAGING_APP_SECRET'),
+            'app_id' => env('STAGING_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
+                'cluster' => env('STAGING_APP_CLUSTER'),
+                'encrypted' => true,
+                'host' => 'ws.qruz.xyz',
+                'port' => 443,
+                'scheme' => 'https',
+                'curl_options' => [
+                    CURLOPT_SSL_VERIFYHOST => 0,
+                    CURLOPT_SSL_VERIFYPEER => 0,
+                ],
             ],
         ],
 

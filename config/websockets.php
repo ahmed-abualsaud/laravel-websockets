@@ -29,7 +29,7 @@ return [
             'secret' => env('STAGING_APP_SECRET'),
             'path' => env('STAGING_APP_PATH'),
             'capacity' => null,
-            'enable_client_messages' => false,
+            'enable_client_messages' => true,
             'enable_statistics' => true,
         ],
     ],

@@ -2,16 +2,17 @@
 
 namespace App\Websockets;
 
+use Exception;
+
 use App\Models\Driver;
 use App\Models\CabRequestEntry;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 use Ratchet\ConnectionInterface;
 use Ratchet\RFC6455\Messaging\MessageInterface;
 use BeyondCode\LaravelWebSockets\WebSockets\WebSocketHandler;
-
-use Illuminate\Support\Facades\Log;
 
 class UpdateDriverLocation extends WebSocketHandler
 {
@@ -39,5 +40,11 @@ class UpdateDriverLocation extends WebSocketHandler
                 CabRequestEntry::create($input);
             }
         }
+    }
+
+    public function onError(ConnectionInterface $connection, Exception $exception)
+    {
+     	parent::onError($connection, $exception);
+        Log::error($exception->getMessage());
     }
 }

@@ -8,20 +8,26 @@ class CabRequestEntry extends Model
 {
     protected $guarded = [];
 
+    protected $primaryKey = 'request_id';
+
     public $timestamps = false;
 
-    public static function calculateDistance($args)
+    public static function getRoute($args)
     {
         $last_location = self::getLastLocation($args['request_id']);
         if($last_location) {
-            return (self::sphereDistance(
-                $args['latitude'], 
-                $args['longitude'], 
-                $last_location->latitude, 
-                $last_location->longitude
-            ) + $last_location->distance);
+            return [ 
+                'distance' => (self::sphereDistance(
+                    $args['latitude'], 
+                    $args['longitude'], 
+                    $last_location->latitude, 
+                    $last_location->longitude
+                ) + $last_location->distance),
+
+                'path' => $last_location->path.'|'.$args['latitude'].','.$args['longitude']
+            ];
         }
-        return 0;
+        return ['distance' => 0, 'path' => $args['latitude'].','.$args['longitude']];
     }
 
     public static function getLastLocation($request_id)

@@ -7,7 +7,6 @@ use Exception;
 use App\Models\Driver;
 use App\Models\CabRequestEntry;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 use Ratchet\ConnectionInterface;
@@ -35,9 +34,10 @@ class UpdateDriverLocation extends WebSocketHandler
             }
 
             if (array_key_exists('request_id', $args) && $args['request_id']) {
-                $input = Arr::only($args, ['request_id', 'latitude', 'longitude']);
-                $input['distance'] = CabRequestEntry::calculateDistance($args);
-                CabRequestEntry::create($input);
+                CabRequestEntry::updateOrCreate(
+                    ['request_id' => $args['request_id']], 
+                    ['latitude' => $args['latitude'], 'longitude' => $args['longitude']] + CabRequestEntry::getRoute($args)
+                );
             }
         }
     }
